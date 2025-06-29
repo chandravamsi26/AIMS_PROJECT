@@ -1,0 +1,148 @@
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7fa;
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+  text-align: center;
+  color: #333;
+}
+
+form {
+    max-width: 600px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.container {
+    max-width: 800px;
+    margin: 30px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.05);
+}
+
+.form-container,
+.survey-container,
+.result-container,
+.search-container {
+  max-width: 800px;
+  margin: 30px auto;
+  background: white;
+  padding: 25px 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px #ccc;
+}
+
+label {
+  display: block;
+  margin-top: 15px;
+  font-weight: bold;
+  color: #555;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    margin-top: 25px;
+    padding: 12px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.download-btn {
+  background-color: #007bff;
+  color: white;
+}
+.download-btn:hover {
+  background-color: #0056b3;
+}
+
+.new-btn {
+  background-color: #28a745;
+  color: white;
+}
+.new-btn:hover {
+  background-color: #218838;
+}
+
+.search-btn {
+  background-color: #6c757d;
+  color: white;
+}
+.search-btn:hover {
+  background-color: #5a6268;
+}
+
+.btn-group {
+    text-align: center;
+}
+
+.btn-group button {
+    width: auto;
+    margin: 5px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f0f0f0;
+    font-weight: 700;
+}
+
+canvas {
+  margin-top: 20px;
+  width: 100% !important;
+  max-width: 700px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+p.error-message {
+  color: red;
+  text-align: center;
+  font-weight: bold;
+}
+
+p.info-message {
+  color: #555;
+  text-align: center;
+}
