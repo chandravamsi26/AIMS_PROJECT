@@ -22,13 +22,15 @@ const SurveyForm = () => {
     patientAwareness: 0,
     emotionalDistress: 0,
     globalRating: 0,
+    otherIssues: "", //New field
   });
 
   const handleChange = (e) => {
-    setSurvey({
-      ...survey,
-      [e.target.name]: parseInt(e.target.value),
-    });
+    const { name, value } = e.target;
+    setSurvey((prev) => ({
+      ...prev,
+      [name]: name === "otherIssues" ? value : parseInt(value),
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -82,6 +84,17 @@ const SurveyForm = () => {
         {renderSelect("10. Patient Awareness of Movements", "patientAwareness")}
         {renderSelect("11. Emotional Distress Due to Movements", "emotionalDistress")}
         {renderSelect("12. Global Rating of Abnormal Movements", "globalRating")}
+
+        <div className="form-group">
+          <label>13. Other Issues (Optional)</label>
+          <textarea
+            name="otherIssues"
+            value={survey.otherIssues}
+            onChange={handleChange}
+            placeholder="Enter any additional movement-related concerns..."
+            rows="3"
+          />   
+        </div>
 
         <button type="submit">Submit Survey</button>
       </form>

@@ -2,8 +2,13 @@ package com.example.aims.model;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "surveys")
 public class Survey {
+    @Id
+    private String id;
 
     @Min(1)
     @Max(5)
@@ -54,6 +59,8 @@ public class Survey {
     private int globalRating;
 
     private String patientId; // store patient ID instead of object
+
+    private String otherIssues;
 
     public Survey() {
     }
@@ -182,4 +189,8 @@ public class Survey {
     public void setPatientId(String patientId) {
         this.patientId = patientId;
     }
+
+    public String getOtherIssues() { return otherIssues; }
+
+    public void setOtherIssues(String otherIssues) { this.otherIssues = otherIssues; }
 }

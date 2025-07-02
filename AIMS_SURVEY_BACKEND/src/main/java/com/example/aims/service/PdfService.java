@@ -28,6 +28,7 @@ public class PdfService {
             addTitle(document);
             addPatientDetails(document, patient);
             addSurveyTable(document, survey);
+            addOtherIssuesSection(document, survey);
             addAssessment(document, survey);
             addChartImage(document, chartBase64);
 
@@ -170,6 +171,26 @@ public class PdfService {
 
         return !shaded;
     }
+
+    private void addOtherIssuesSection(Document document, Survey survey) throws DocumentException {
+        if (survey.getOtherIssues() != null && !survey.getOtherIssues().trim().isEmpty()) {
+            Font boldFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12);
+            Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 12);
+
+            Paragraph para = new Paragraph();
+            para.setSpacingBefore(10f);
+            para.setSpacingAfter(10f);
+
+            Chunk label = new Chunk("Other Reported Issues: ", boldFont);
+            Chunk value = new Chunk(survey.getOtherIssues().trim(), normalFont);
+
+            para.add(label);
+            para.add(value);
+
+            document.add(para);
+        }
+    }
+
 
     // Shared fonts
     private Font sectionFont() {
