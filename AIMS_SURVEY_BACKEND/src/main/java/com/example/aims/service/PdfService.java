@@ -4,14 +4,20 @@ import com.example.aims.model.Patient;
 import com.example.aims.model.Survey;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class PdfService {
+
+    @Autowired
+    private MlService mlService;
 
     public void generatePdf(Patient patient, Survey survey, String chartBase64, HttpServletResponse response) {
         try {
@@ -104,20 +110,38 @@ public class PdfService {
         Font labelFont = boldFont();
         Font valueFont = normalFont();
 
-        int avgScore = (
-                survey.getFacialMuscles() + survey.getLipsPerioral() + survey.getJaw() +
-                        survey.getTongue() + survey.getUpperExtremities() + survey.getLowerExtremities() +
-                        survey.getNeckShouldersHips() + survey.getSeverityOfMovements() +
-                        survey.getIncapacitationDueToMovements() + survey.getPatientAwareness() +
-                        survey.getEmotionalDistress() + survey.getGlobalRating()
-        ) / 12;
+        // 1. Calculate average score
+        double totalScore = survey.getFacialMuscles() + survey.getLipsPerioral() + survey.getJaw() + survey.getTongue() +
+                        survey.getUpperExtremities() + survey.getLowerExtremities() + survey.getNeckShouldersHips() +
+                        survey.getSeverityOfMovements() + survey.getIncapacitationDueToMovements() + survey.getPatientAwareness() +
+                        survey.getEmotionalDistress() + survey.getGlobalRating();
 
-        String advice = avgScore <= 2 ? "No severe issues detected. Routine monitoring advised."
-                : avgScore <= 3 ? "Mild signs detected. Consider follow-up with a specialist."
-                : "Moderate to severe symptoms detected. Immediate evaluation recommended.";
+        double averageScore = totalScore / 12.0;
+        String avgScoreStr = String.format("%.2f", averageScore);
 
-        addLabelValue(document, "Average Score", String.valueOf(avgScore), labelFont, valueFont);
-        addLabelValue(document, "Assessment", advice, labelFont, valueFont);
+        // 2. Call Flask microservice for prediction
+        Map<String, Integer> surveyData = new HashMap<>();
+        surveyData.put("facialMuscles", survey.getFacialMuscles());
+        surveyData.put("lipsPerioral", survey.getLipsPerioral());
+        surveyData.put("jaw", survey.getJaw());
+        surveyData.put("tongue", survey.getTongue());
+        surveyData.put("upperExtremities", survey.getUpperExtremities());
+        surveyData.put("lowerExtremities", survey.getLowerExtremities());
+        surveyData.put("neckShouldersHips", survey.getNeckShouldersHips());
+        surveyData.put("severityOfMovements", survey.getSeverityOfMovements());
+        surveyData.put("incapacitationDueToMovements", survey.getIncapacitationDueToMovements());
+        surveyData.put("patientAwareness", survey.getPatientAwareness());
+        surveyData.put("emotionalDistress", survey.getEmotionalDistress());
+        surveyData.put("globalRating", survey.getGlobalRating());
+
+        Map<String, String> result = mlService.getPrediction(surveyData);
+        String assessment = result.getOrDefault("assessment", "Unavailable");
+        String suggestion = result.getOrDefault("suggestion", "No recommendation.");
+
+        // 3. Add values to PDF
+        addLabelValue(document, "Average Score", avgScoreStr, labelFont, valueFont);
+        addLabelValue(document, "Assessment", assessment, labelFont, valueFont);
+        addLabelValue(document, "Suggestion", suggestion, labelFont, valueFont);
     }
 
     private void addChartImage(Document document, String base64) {
